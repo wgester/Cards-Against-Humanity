@@ -34,10 +34,10 @@ angular.module('App', ['ngRoute', 'cardsAgainstHumanity', 'login'])
 
 angular.module('login', ['firebase'])
 
-.controller('Auth', ['$scope', '$firebase', '$rootScope',
-  function($scope, $firebase, $rootScope){
+.controller('Auth', ['$scope', '$firebase', '$rootScope', '$location',
+  function($scope, $firebase, $rootScope, $location){
     var chatRef = new Firebase('https://cardgames.firebaseio.com');
-    var auth = new FirebaseSimpleLogin(chatRef, function(error, user) {
+    $rootScope.auth = new FirebaseSimpleLogin(chatRef, function(error, user) {
       if (error) {
         // an error occurred while attempting login
         switch(error.code) {
@@ -56,35 +56,30 @@ angular.module('login', ['firebase'])
         window.user = user;
         $scope.loggedIn = "User " + user.id + " is logged in!";
         $rootScope.loggedUser = 'true';
+        $location.path( "/game" );
       } else {
         console.log('User logged out');
         $rootScope.loggedUser = null;
       }
     });
     $scope.authorizeUser = function(){
-      auth.createUser($scope.signUpEmail, $scope.signUpPassword, function(error, user) {
+      $rootScope.auth.createUser($scope.signUpEmail, $scope.signUpPassword, function(error, user) {
         if (!error) {
           console.log('User Id: ' + user.id + ', Email: ' + user.signUpEmail);
         }
-        auth.login('password', {
+        $rootScope.auth.login('password', {
           email: $scope.signUpEmail,
           password: $scope.signUpPassword
         });
       });
     };
     $scope.login = function(){
-      auth.login('password', {
+      $rootScope.auth.login('password', {
         email: $scope.email,
         password: $scope.password
       });
     };
-    $scope.logout = function(){
-      auth.logout();
-      console.log("logged out");
-      $scope.loggedIn = null;
-      window.user = null;
-      $rootScope.loggedUser = null;
-    };
+   
   }])
 
 angular.module('cardsAgainstHumanity', ['firebase'])
@@ -106,8 +101,8 @@ angular.module('cardsAgainstHumanity', ['firebase'])
       // var tempCard = $firebase(ref.child('cards').child('black').child(tempIndex));
       // $scope.blackCard[tempIndex] = tempCard;
 //     }])
-.controller('Game', ['$scope', '$firebase', '$rootScope',
-  function($scope, $firebase, $rootScope){
+.controller('Game', ['$scope', '$firebase', '$rootScope', '$location',
+  function($scope, $firebase, $rootScope, $location){
     var ref = new Firebase('https://cardgames.firebaseio.com/cardsAgainstHumanity/');
     $scope.whiteCards = {};
     for (var i = 0; i < 7; i++){
@@ -137,6 +132,14 @@ angular.module('cardsAgainstHumanity', ['firebase'])
           absRef.child('/games/' + $scope.gameName + '/blackCards/' + i).set(tempCard);
         }
       });
+    };
+    $scope.logout = function(){
+      $rootScope.auth.logout();
+      console.log("logged out");
+      $scope.loggedIn = null;
+      window.user = null;
+      $rootScope.loggedUser = null;
+      $location.path( "/login" );
     };
 
 
