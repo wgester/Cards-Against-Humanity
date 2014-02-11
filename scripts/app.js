@@ -1,4 +1,50 @@
+angular.module('App', ['cardsAgainstHumanity', 'login'])
 
+angular.module('login', ['firebase'])
+
+.controller('Auth', ['$scope', '$firebase',
+  function($scope, $firebase){
+    var chatRef = new Firebase('https://cardgames.firebaseio.com');
+    var auth = new FirebaseSimpleLogin(chatRef, function(error, user) {
+      if (error) {
+        // an error occurred while attempting login
+        switch(error.code) {
+          case 'INVALID_EMAIL': 
+            console.log("EMAIL");
+            break;
+          case 'INVALID_PASSWORD':
+            console.log("PASSWORD");
+            break;
+          default:
+            console.log("Something else?");
+        }
+      } else if (user) {
+        // user authenticated with Firebase
+        console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
+        window.user = user;
+      } else {
+        console.log('User logged out');
+      }
+    });
+    $scope.authorizeUser = function(){
+      auth.createUser($scope.signUpEmail, $scope.signUpPassword, function(error, user) {
+        if (!error) {
+          console.log('User Id: ' + user.id + ', Email: ' + user.signUpEmail);
+        }
+        auth.login('password', {
+          email: $scope.signUpEmail,
+          password: $scope.signUpPassword
+        });
+      });
+    };
+    $scope.login = function(){
+      auth.login('password', {
+        email: $scope.email,
+        password: $scope.password
+      });
+    };
+
+  }])
 
 angular.module('cardsAgainstHumanity', ['firebase'])
 
