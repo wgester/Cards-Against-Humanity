@@ -10,8 +10,9 @@
     <link href="css/app.css" rel="stylesheet" type="text/css" media="screen">
   </head>
 
-  <body>
-    <div ng-app="cardsAgainstHumanity" ng-controller="Game">
+  <body  ng-app="cardsAgainstHumanity">
+    <div ng-controller="Game">
+
     <div ng-cloak ng-repeat="card in whiteCards">
       <div id="whiteCard">{{card.Text}}</div>
     </div>

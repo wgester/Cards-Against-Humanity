@@ -8,6 +8,8 @@
     color: white;
     background-color: black;
     float: left;
+    font-weight: bold;
+    font-size: 16px
 }
 
 #whiteCard{
@@ -18,4 +20,6 @@
     margin: 2px;
     padding: 10px;
     float: left;
+    font-weight: bolder;
+    font-size: 16px;
 }
