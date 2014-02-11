@@ -1,4 +1,20 @@
-angular.module('App', ['cardsAgainstHumanity', 'login'])
+angular.module('App', ['ngRoute', 'cardsAgainstHumanity', 'login'])
+
+.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/game', {
+        templateUrl: 'partials/game.html',
+        // controller: 'Game'
+      }).
+      when('/login', {
+        templateUrl: 'partials/login.html',
+        // controller: 'Auth'
+      }).
+      otherwise({
+        redirectTo: '/login'
+      });
+  }]);
 
 angular.module('login', ['firebase'])
 
@@ -22,6 +38,7 @@ angular.module('login', ['firebase'])
         // user authenticated with Firebase
         console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
         window.user = user;
+        $scope.loggedIn = "User " + user.id + " is logged in!";
       } else {
         console.log('User logged out');
       }
@@ -43,7 +60,11 @@ angular.module('login', ['firebase'])
         password: $scope.password
       });
     };
-
+    $scope.logout = function(){
+      auth.logout();
+      console.log("logged out");
+      $scope.loggedIn = null;
+    };
   }])
 
 angular.module('cardsAgainstHumanity', ['firebase'])

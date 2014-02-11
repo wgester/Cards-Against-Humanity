@@ -1,0 +1,27 @@
+<div ng-controller="Auth">
+  <h1 ng-model="loggedIn">{{loggedIn}}</h1>
+  <div id="signup">
+    <form class="form-inline">Sign Up! <br>
+      <input type="text" ng-model="signUpEmail" placeholder="Email...">
+    </form>
+    <form class="form-inline" ng-submit="authorizeUser()">
+      <input type="text" ng-model="signUpPassword" placeholder="Password...">
+      <button class="btn" type="submit">
+        <i class="icon-reply"> Submit</i>
+      </button>
+    </form>
+  </div>
+
+  <div id="login">
+    <form class="form-inline">Log In! <br>
+      <input type="text" ng-model="email" placeholder="Email...">
+    </form>
+    <form class="form-inline" ng-submit="login()">
+      <input type="text" ng-model="password" placeholder="Password...">
+      <button class="btn" type="submit">
+        <i class="icon-reply"> Submit</i>
+      </button>
+    </form>
+  </div>
+  <button ng-click="logout()">Log Out</button>
+</div>

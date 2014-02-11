@@ -11,49 +11,12 @@
   </head>
 
   <body  ng-app="App">
-    <div ng-controller="Auth">
-      <div id="signup">
-        <form class="form-inline">Sign Up! <br>
-          <input type="text" ng-model="signUpEmail" placeholder="Email...">
-        </form>
-        <form class="form-inline" ng-submit="authorizeUser()">
-          <input type="text" ng-model="signUpPassword" placeholder="Password...">
-          <button class="btn" type="submit">
-            <i class="icon-reply"> Submit</i>
-          </button>
-        </form>
-      </div>
 
-      <div id="login">
-        <form class="form-inline">Log In! <br>
-          <input type="text" ng-model="email" placeholder="Email...">
-        </form>
-        <form class="form-inline" ng-submit="login()">
-          <input type="text" ng-model="password" placeholder="Password...">
-          <button class="btn" type="submit">
-            <i class="icon-reply"> Submit</i>
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <div ng-controller="Game">
-
-    <div ng-cloak ng-repeat="card in whiteCards">
-      <div id="whiteCard">{{card.Text}}</div>
-    </div>
-    <div ng-cloak ng-repeat="card in blackCard">
-      <div id="blackCard">{{card.Text}}</div>
-    </div>
-      <form class="form-inline" ng-submit="newGame()">
-        <input type="text" ng-model="gameName" placeholder="Message...">
-        <button class="btn" type="submit">
-          <i class="icon-reply"> Send</i>
-        </button>
-      </form>
-    </div>
+    <div ng-view></div>
+    
   </body>
     <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/firebase/firebase.js"></script>
     <script src="bower_components/angularfire/angularfire.min.js"></script>
     <script src="bower_components/firebase-simple-login/firebase-simple-login.js"></script>
