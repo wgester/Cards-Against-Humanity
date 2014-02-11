@@ -1,0 +1,25 @@
+{
+  "name": "Cards Against Humanity",
+  "version": "0.0.0",
+  "authors": [
+    "Will Gester <wiilgester@gmail.com>"
+  ],
+  "description": "\"Multiplayer AngularFire Cards Against Humanity\"",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.12",
+    "angularfire": "~0.6.0",
+    "firebase": "~1.0.5",
+    "font-awesome": "~4.0.3",
+    "bootstrap": "~3.1.0",
+    "fireuser": "~0.3.0"
+  }
+}

@@ -1,0 +1,35 @@
+<!doctype html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cards Against Humanity</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+    <link href="css/app.css" rel="stylesheet" type="text/css" media="screen">
+  </head>
+
+  <body>
+    <div ng-app="cardsAgainstHumanity" ng-controller="Game">
+    <div ng-cloak ng-repeat="card in whiteCards">
+      <div id="whiteCard">{{card.Text}}</div>
+    </div>
+    <div ng-cloak ng-repeat="card in blackCard">
+      <div id="blackCard">{{card.Text}}</div>
+    </div>
+      <form class="form-inline" ng-submit="newGame()">
+        <input type="text" ng-model="gameName" placeholder="Message...">
+        <button class="btn" type="submit">
+          <i class="icon-reply"> Send</i>
+        </button>
+      </form>
+    </div>
+  </body>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/firebase/firebase.js"></script>
+    <script src="bower_components/angularfire/angularfire.min.js"></script>
+    <script src="bower_components/firebase-simple-login/firebase-simple-login.js"></script>
+    <script src="scripts/newGame.js"></script>
+    <script src="scripts/app.js"></script>
+</html>
