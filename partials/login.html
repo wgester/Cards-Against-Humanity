@@ -2,12 +2,15 @@
   <h1 ng-model="loggedIn">{{loggedIn}}</h1>
   <div id="signup">
     <form class="form-inline">Sign Up! <br>
-      <input type="text" ng-model="signUpEmail" placeholder="Email...">
+      <input type="text" id="sg" ng-model="signUpEmail" placeholder="Email...">
+    </form>
+    <form class="form-inline">
+      <input type="text" ng-model="signUpUsername" placeholder="Username...">
     </form>
     <form class="form-inline" ng-submit="authorizeUser()">
       <input type="text" ng-model="signUpPassword" placeholder="Password...">
       <button class="btn" type="submit">
-        <i class="icon-reply"> Submit</i>
+        <i class="icon-reply">Submit</i>
       </button>
     </form>
   </div>
@@ -19,7 +22,7 @@
     <form class="form-inline" ng-submit="login()">
       <input type="text" ng-model="password" placeholder="Password...">
       <button class="btn" type="submit">
-        <i class="icon-reply"> Submit</i>
+        <i class="icon-reply">Submit</i>
       </button>
     </form>
   </div>

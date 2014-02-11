@@ -1,16 +1,14 @@
  <div ng-controller="Game">
-   {{loggedIN}}
+   {{loggedUser}}{{gameName}}
     <div ng-cloak ng-repeat="card in whiteCards">
       <div id="whiteCard">{{card.Text}}</div>
     </div>
     <div ng-cloak ng-repeat="card in blackCard">
       <div id="blackCard">{{card.Text}}</div>
     </div>
-      <form class="form-inline" ng-submit="newGame()">
-        <input type="text" ng-model="gameName" placeholder="Message...">
-        <button class="btn" type="submit">
-          <i class="icon-reply"> Send</i>
-        </button>
-      </form>
-      <button ng-click="logout()">Log Out</button>
-    </div>
+      
+</div>
+   
+<div ng-controller="User">
+  <button ng-click="logout()">Log Out</button>
+</div>

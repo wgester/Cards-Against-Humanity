@@ -1,0 +1,17 @@
+<div ng-controller="AllGames">
+
+  <form class="form-inline" ng-submit="newGame()">
+    <input type="text" ng-model="gameName" placeholder="Game Name...">
+    <button class="btn" type="submit">
+      <i class="icon-reply"> New Game! </i>
+    </button>
+  </form>
+  <div ng-repeat="game in games">
+     <input type="radio" name="group1" ng-click="joinGame(game)" value="{{game}}">{{game}}
+  </div>
+
+</div>
+  
+<div ng-controller="User">
+  <button ng-click="logout()">Log Out</button>
+</div>
