@@ -14,12 +14,28 @@ angular.module('App', ['ngRoute', 'cardsAgainstHumanity', 'login'])
       otherwise({
         redirectTo: '/login'
       });
-  }]);
+}])
+
+.run( function($rootScope, $location) {
+
+    // register listener to watch route changes
+    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+      if ( $rootScope.loggedUser == null ) {
+        // no logged user, we should be going to #login
+        if ( next.templateUrl == "partials/login.html" ) {
+          // already going to #login, no redirect needed
+        } else {
+          // not going to #login, we should redirect now
+          $location.path( "/login" );
+        }
+      }         
+    });
+ })
 
 angular.module('login', ['firebase'])
 
-.controller('Auth', ['$scope', '$firebase',
-  function($scope, $firebase){
+.controller('Auth', ['$scope', '$firebase', '$rootScope',
+  function($scope, $firebase, $rootScope){
     var chatRef = new Firebase('https://cardgames.firebaseio.com');
     var auth = new FirebaseSimpleLogin(chatRef, function(error, user) {
       if (error) {
@@ -39,8 +55,10 @@ angular.module('login', ['firebase'])
         console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
         window.user = user;
         $scope.loggedIn = "User " + user.id + " is logged in!";
+        $rootScope.loggedUser = 'true';
       } else {
         console.log('User logged out');
+        $rootScope.loggedUser = null;
       }
     });
     $scope.authorizeUser = function(){
@@ -64,6 +82,8 @@ angular.module('login', ['firebase'])
       auth.logout();
       console.log("logged out");
       $scope.loggedIn = null;
+      window.user = null;
+      $rootScope.loggedUser = null;
     };
   }])
 
@@ -86,8 +106,8 @@ angular.module('cardsAgainstHumanity', ['firebase'])
       // var tempCard = $firebase(ref.child('cards').child('black').child(tempIndex));
       // $scope.blackCard[tempIndex] = tempCard;
 //     }])
-.controller('Game', ['$scope', '$firebase',
-  function($scope, $firebase){
+.controller('Game', ['$scope', '$firebase', '$rootScope',
+  function($scope, $firebase, $rootScope){
     var ref = new Firebase('https://cardgames.firebaseio.com/cardsAgainstHumanity/');
     $scope.whiteCards = {};
     for (var i = 0; i < 7; i++){
