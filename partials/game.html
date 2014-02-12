@@ -1,17 +1,28 @@
  <div ng-controller="Game">
+   <div class="userContainer">
+     <div  ng-repeat="users in userData">
+       <div id="user">
+       Username: {{users.username}} <br>
+       Score: {{users.score}}
+       </div>
+     </div>
+   </div>
  </div>
 
  <div ng-controller="UserHand">
-   {{loggedUser}}{{gameName}}
-    <div ng-cloak ng-repeat="card in whiteCards">
-      <div id="whiteCard">{{card.Text}}</div>
-    </div>
-    <div ng-cloak ng-repeat="card in blackCard">
-      <div id="blackCard">{{card.Text}}</div>
+    <div class="gameContainer"> 
+      <div ng-cloak ng-repeat="card in blackCard">
+        <div id="blackCard">{{card.Text}}</div>
+      </div>
     </div>
       
+    <div class="whiteContainer">
+      <div ng-cloak ng-repeat="card in whiteCards">
+        <div id="whiteCard">{{card.Text}}</div>
+      </div>
+    </div>
 </div>
    
-<div ng-controller="User">
+<div id='logout' ng-controller="User">
   <button ng-click="logout()">Log Out</button>
 </div>
