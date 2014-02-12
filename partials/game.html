@@ -1,9 +1,11 @@
  <div ng-controller="Game">
+  <h1 style="margin-left: 10px">{{gameName}}</h1>
    <div class="userContainer">
      <div  ng-repeat="users in userData">
        <div id="user">
        Username: {{users.username}} <br>
-       Score: {{users.score}}
+       Score: {{users.score}} <br>
+       Judging: {{users.judge}}
        </div>
      </div>
    </div>
@@ -14,11 +16,14 @@
       <div ng-cloak ng-repeat="card in blackCard">
         <div id="blackCard">{{card.Text}}</div>
       </div>
+      <div ng-cloak ng-repeat="card in inPlay">
+        <div ng-click="pickWinner(card.id)" id="whiteCard">{{card.Text}}</div>
+      </div>
     </div>
       
     <div class="whiteContainer">
       <div ng-cloak ng-repeat="card in whiteCards">
-        <div id="whiteCard">{{card.Text}}</div>
+        <div ng-click="pickCard(card)" class="whiteCard" id="whiteCard">{{card.Text}}</div>
       </div>
     </div>
 </div>

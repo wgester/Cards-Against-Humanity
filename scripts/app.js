@@ -105,6 +105,7 @@ angular.module('cardsAgainstHumanity', ['firebase'])
     }
     var ref = new Firebase('https://cardgames.firebaseio.com/cardsAgainstHumanity/');
     var playerRef = $firebase(ref.child('games').child($rootScope.gameName).child('users'));
+    var playerRefer = ref.child('games').child($rootScope.gameName).child('users');
     var whiteRef = ref.child('games').child($rootScope.gameName).child('whiteCardCount');
     whiteRef.on('value', function(snapshot){
       $scope.whiteCardCount = snapshot.val();
@@ -125,9 +126,10 @@ angular.module('cardsAgainstHumanity', ['firebase'])
         for (var i = 0; i < playerData.length; i++){
           if (!playerData[i].dealt){
             cardRef.once('value', function(snapshot){
+              console.log(players[i], 'here')
               for (var j = $scope.whiteCardCount; j < ($scope.whiteCardCount + 7); j++){
                 var tempCard = snapshot.child(j).val();
-                playerRef.$child(players[i]).$child('cards').$add(tempCard);
+                playerRefer.child(players[i]).child('cards').child(j).set({'Text': tempCard.Text, 'id':j});
               }
               whiteRef.set($scope.whiteCardCount + 7);
                 
@@ -138,12 +140,18 @@ angular.module('cardsAgainstHumanity', ['firebase'])
       },0);
     }
     $scope.dealNewHand($scope.players);
+
+    $scope.playHand = function(){
+      
+    }
     
     var userRef = ref.child('games').child($rootScope.gameName).child('users');
     userRef.on('value', function(snapshot){
       $scope.userData = snapshot.val();
     })
     
+
+
 
 
 
@@ -193,20 +201,63 @@ angular.module('userHand', ['firebase'])
     }
     var userRef = new Firebase('https://cardgames.firebaseio.com/cardsAgainstHumanity/games/' + $rootScope.gameName + '/users/' + $rootScope.user.id);
     $scope.whiteCards = {};
-    whiteCardRef = $firebase(userRef.child('cards'));
-    $timeout(function(){
-      var tempWhiteCards = whiteCardRef.$getIndex();
-      userRef.on('value', function(snapshot){
-        for (var i = 0; i < tempWhiteCards.length; i++){
-          $scope.whiteCards[i] = snapshot.child('cards').child(tempWhiteCards[i]).val();
-        }
-
-      });
-
-    },0)
-
+    
+    userRef.child('cards').on('value', function(snapshot){
+      $scope.whiteCards = {};
+      for (var key in snapshot.val()){
+        $scope.whiteCards[key] = snapshot.val()[key] 
+      }
+    });
 
     var ref = new Firebase('https://cardgames.firebaseio.com/cardsAgainstHumanity/games/' + $rootScope.gameName);
+
+    var inPlayRef = ref.child('chosenCards');
+    inPlayRef.on('value', function(snapshot){
+      $scope.inPlay = snapshot.val();
+      console.log($scope.inPlay)
+    })
+    
+    userRef.child('picked').on('value', function(snapshot){
+      $scope.picked = snapshot.val();
+    })
+
+    userRef.child('judge').on('value', function(snapshot){
+      $scope.judge = snapshot.val();
+    })
+
+    $scope.pickWinner = function(card){
+      if ($scope.judge){
+        ref.child('users').child(card).child('score').once('value', function(snapshot){
+          ref.child('users').child(card).child('score').set(snapshot.val() + 1);
+          userRef.child('picked').set(false);
+          userRef.child('judge').set(false);
+          ref.child('users').child(card).child('judge').set(true);
+          ref.child('chosenCards').set(null);
+        });
+        ref.once('value', function(snapshot){
+          var blackCount = snapshot.child('blackCardCount').val();
+          ref.child('blackCardCount').set(blackCount + 1);
+        })
+      }
+    }
+
+    $scope.pickCard = function(card){
+      if (!$scope.picked){
+        $scope.chosenCard = card.Text;
+        userRef.child('cards').child(card.id).set(null);
+        ref.child('chosenCards').child($rootScope.user.id).set({'Text':card.Text, 'id':$rootScope.user.id});
+        userRef.child('picked').set(true);
+        ref.once('value', function(snapshot){
+          var whiteCount = snapshot.child('whiteCardCount').val();
+          var tempCard = snapshot.child('whiteCards').child(whiteCount).val();
+          userRef.child('cards').child(whiteCount).set({'Text': tempCard.Text, 'id':whiteCount});
+          ref.child('whiteCardCount').set(whiteCount + 1);
+        })
+      }
+    };
+
+
+   
     var blackRef = ref.child('blackCardCount');
     blackRef.on('value', function(snapshot){
       $scope.blackCardCount = snapshot.val();
@@ -266,14 +317,14 @@ angular.module('allGames', ['firebase'])
       absRef.child('/games/' + $scope.gameName + '/gameName').set($scope.gameName);
       absRef.child('/games/' + $scope.gameName + '/blackCardCount').set(0);
       absRef.child('/games/' + $scope.gameName + '/whiteCardCount').set(0);
-      absRef.child('/games/' + $scope.gameName + '/users/' + $rootScope.user.id).set({'username':$rootScope.username.$value, 'dealt':false, 'cards':1, 'score':0});
+      absRef.child('/games/' + $scope.gameName + '/users/' + $rootScope.user.id).set({'username':$rootScope.username.$value, 'dealt':false, 'cards':1, 'score':0, 'judge': true, 'picked': false});
       $rootScope.gameName = $scope.gameName;
       $location.path("/game");
     };
 
 
     $scope.joinGame = function(gameName){
-      ref.child('/games/' + gameName + '/users/' + $rootScope.user.id).set({'username':$rootScope.username.$value, 'dealt':false, 'cards':1, 'score':0});
+      ref.child('/games/' + gameName + '/users/' + $rootScope.user.id).set({'username':$rootScope.username.$value, 'dealt':false, 'cards':1, 'score':0, 'judge':false, 'picked': false});
       $rootScope.gameName = gameName;
       $location.path("/game");
     };
